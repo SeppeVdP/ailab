@@ -24,7 +24,7 @@ if __name__ == "__main__":
     # create a LinearRegression instance named model
     model = models.models.LinearRegression()
     # define the opimizer
-    optimizer = torch.optim.Adam(model.parameters(), options.lr)
+    optimizer = torch.optim.SGD(model.parameters(), options.lr, momentum=0.9)
     # (visit https://pytorch.org/docs/stable/optim.html?highlight=torch%20optim#module-torch.optim for more info)
     # train the model
     utils.train_lin_model(model, optimizer, train_dataloader, options)

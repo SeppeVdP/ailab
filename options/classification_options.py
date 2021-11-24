@@ -11,4 +11,5 @@ class ClassificationOptions(Options):
         # hyperparameters
         self.lr = 1
         self.num_epochs = 10
-        self.hidden_sizes = []
+        '''amount of nodes per layer'''
+        self.hidden_sizes = [784, 40, 20, 10]
