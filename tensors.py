@@ -50,7 +50,6 @@ def tensor_network():
     print(f"The current weights are: {weights}")
 
     """START TODO: the loss needs to be backpropagated"""
-    #output.backward(loss)
     loss.backward()
     """END TODO"""
 

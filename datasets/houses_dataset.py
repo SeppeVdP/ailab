@@ -32,6 +32,7 @@ class HousesDataset(Dataset):
         return (100000 + house_sizes * 5000 + self.options.noise_house_data * torch.randn(size)).to(options.device)
 
     def create_house_sizes(self, size: int, options: LinearRegressionOptions) -> torch.Tensor:
+
         return (torch.rand(size) * (options.max_house_size - options.min_house_size)
                 + options.min_house_size).to(options.device)
 
@@ -41,7 +42,7 @@ class HousesDataset(Dataset):
         """
 
         print(f"The shape of the data tensor is: {self.data.shape}")
-
+        print(f"Tensor is stored on: {self.data.device}")
         fig = plt.figure()
         plt.scatter(self.data[:, 0], self.data[:, 1])
 

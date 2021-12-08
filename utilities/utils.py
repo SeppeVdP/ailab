@@ -38,12 +38,13 @@ def train_lin_model(model: LinearRegression, optimizer: torch.optim.Optimizer,
         for data in train_data:
             size, price = data[:, 0].unsqueeze(1).to(options.device), data[:, 1].unsqueeze(1).to(options.device)
             """START TODO: implement some missing parts. look at the comments to see what needs to be done."""
-            # Forward the size data through the model
-            forwarded = model.linear_layer.forward(size)
-            # calculate the loss, use your self created mse loss
-            loss = losses.losses.mse(forwarded, price)
-            # As mentioned before, the grads always needs to be zeroed before backprop (use your optimizer to do this)
             optimizer.zero_grad()
+            # Forward the size data through the model
+            output = model.forward(size)
+            # calculate the loss, use your self created mse loss
+            loss = losses.losses.mse(output, price)
+            # As mentioned before, the grads always needs to be zeroed before backprop (use your optimizer to do this)
+#            optimizer.zero_grad()
             # propagate the loss backward
             loss.backward()
             # use your optimizer to perform an update step
@@ -100,28 +101,49 @@ def test_lin_reg_plot(model: LinearRegression, test_data: DataLoader, options: L
 def train_classification_model(model: Classifier, optimizer: torch.optim.Optimizer,
                                dataset: MNISTDataset, options: ClassificationOptions):
     """START TODO: select an appropriate criterion (loss function)"""
-    criterion = nn.MSELoss()
+
+    criterion = nn.CrossEntropyLoss()
     """END TODO"""
     for epoch in range(options.num_epochs):
         running_loss = 0
+
         for x, y in dataset.train_loader:
             """START TODO: fill in the gaps as mentioned by the comments"""
             # forward the data x through the model.
             # Note: x does not have the correct shape,
             # it should become (batch_size, -1), where the size -1 is inferred from other dimensions
             # (see TORCH.TENSOR.VIEW on the PyTorch documentation site)
-            x_reworked = x.view(options.batch.size.test, -1)
-            forwarded = model.Classifier.forward(x_reworked)
+            # options.batch_size_train
+            x_reshaped = x.view(x.size(0), -1).to(options.device)
+            y = y.cuda()
+            x = x.cuda()
+     #       x_reshaped.cuda()
+    #        print(f"Tensor x_reshaped is stored on: {x_reshaped.device} ")
+            prediction = model.forward(x_reshaped)
+            prediction.cuda()
+     #       print(f"Tensor prediction is stored on: {prediction.device} ")
+
+            # eigen functie, datasetwaarden door ons model sturen en met de output iets doen
+
             # calculate the loss, use your previously defined criterion
-            loss = criterion(forwarded, y)
+
+
+          #  print(f"Tensor x is stored on: {x.device} ")
+           # print(f"Tensor y is stored on: {y.device} ")
+
+
+            loss = criterion(prediction, y)
+            loss = loss.cuda()
             # zero out all gradients
             optimizer.zero_grad()
+
             # propagate the loss backward
             loss.backward()
             # use your optimizer to perform an update step
             optimizer.step()
             """END TODO"""
             running_loss += loss.item()
+
         print(f'epoch [{epoch + 1}/{options.num_epochs}]: ', end="")
         print(f"Running loss = {running_loss / len(dataset.train_loader)}")
         test_classification_model(model, dataset, options)
@@ -133,10 +155,13 @@ def test_classification_model(model: Classifier, dataset: MNISTDataset, options:
         correct = 0
 
         for x, y in dataset.test_loader:
+            y = y.cuda()
+            x = x.cuda()
             output = model(x.view(x.shape[0], -1).to(options.device))
-
+            output.cuda()
             # choose the number with the highest probability as prediction
             _, predicted = torch.max(output, dim=1)
+
             tot += y.size(0)
             correct += (predicted == y).sum().item()
         print(f'Accuracy: {100 * correct / tot :.2f}%')

@@ -41,27 +41,42 @@ class Classifier(nn.Module):
             include the input and output as well).
         """
 
+        """linear layer + ReLu function"""
         self.layer1 = nn.Sequential(
-                torch.nn.Linear(options.hidden_sizes[0], options.hidden_sizes[1]),
-                torch.nn.ReLU()
+            nn.Linear(options.hidden_sizes[0], options.hidden_sizes[1]),
+            nn.ReLU()
         )
+
+        """linear layer + ReLu function"""
         self.layer2 = nn.Sequential(
-                torch.nn.Linear(options.hidden_sizes[1], options.hidden_sizes[2]),
-                torch.nn.ReLU()
+            nn.Linear(options.hidden_sizes[1], options.hidden_sizes[2]),
+            nn.ReLU()
         )
+
         self.layer3 = nn.Sequential(
-            torch.nn.Linear(options.hidden_sizes[2], options.hidden_sizes[3]),
-            torch.nn.Softmax()
+            nn.Linear(options.hidden_sizes[2], options.hidden_sizes[3]),
+            nn.ReLU()
+        )
+
+        """linear layer + Softmax function
+        the softmax function, only for this layer a classification itself (last layer)
+        """
+        """Print(),"""
+        self.layer4 = nn.Sequential(
+            nn.Linear(options.hidden_sizes[3], options.hidden_sizes[4]),
+            nn.ReLU(),
+            nn.Softmax(dim=1)
         )
         """END TODO"""
 
     def forward(self, x: torch.Tensor):
         """START TODO: forward tensor x through all layers."""
-        layer1 = self.layer1(x)
-        layer2 = self.layer2(layer1)
-        x = self.layer3(layer2)
+        output_l1 = self.layer1(x)
+        output_l2 = self.layer2(output_l1)
+        output_l3 = self.layer3(output_l2)
+        output_l4 = self.layer4(output_l3)
         """END TODO"""
-        return x
+        return output_l4
 
 
 class ClassifierVariableLayers(nn.Module):

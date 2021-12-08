@@ -14,13 +14,15 @@ if __name__ == "__main__":
     dataset = MNISTDataset(options)
     dataset.show_examples()
 
+
     """START TODO: fill in the missing parts"""
     # create a Classifier instance named model
-    model = None
-    # define the opimizer
-
+    model = Classifier(options)
+    model = model.cuda()
+    #define the optimizer
+    optimizer = torch.optim.SGD(params=model.parameters(), lr=options.lr, momentum=1)
     # train the model
-
+    utils.train_classification_model(model=model, optimizer=optimizer, dataset=dataset, options=options)
     """END TODO"""
 
     # Test the model
