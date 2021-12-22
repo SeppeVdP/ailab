@@ -20,7 +20,7 @@ if __name__ == "__main__":
     model = Classifier(options)
     model = model.cuda()
     #define the optimizer
-    optimizer = torch.optim.SGD(params=model.parameters(), lr=options.lr, momentum=1)
+    optimizer = torch.optim.Adam(params=model.parameters(), lr=options.lr)
     # train the model
     utils.train_classification_model(model=model, optimizer=optimizer, dataset=dataset, options=options)
     """END TODO"""

@@ -48,7 +48,6 @@ def tensor_network():
 
     # Lets update the weights now using our loss..
     print(f"The current weights are: {weights}")
-
     """START TODO: the loss needs to be backpropagated"""
     loss.backward()
     """END TODO"""
@@ -56,7 +55,7 @@ def tensor_network():
     print(f"The gradients are: {weights.grad}")
     """START TODO: implement the update step with a learning rate of 0.5"""
     # use tensor operations, recall the following formula we've seen during class: x <- x - alpha * x'
-    weights = weights - (0.5 * weights.grad)
+    weights = weights - (0.0001 * weights.grad)
     """END TODO"""
     print(f"The new weights are: {weights}\n")
 

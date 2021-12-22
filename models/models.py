@@ -54,18 +54,16 @@ class Classifier(nn.Module):
         )
 
         self.layer3 = nn.Sequential(
-            nn.Linear(options.hidden_sizes[2], options.hidden_sizes[3]),
-            nn.ReLU()
-        )
+             nn.Linear(options.hidden_sizes[2], options.hidden_sizes[3]),
+             nn.ReLU()
+         )
 
         """linear layer + Softmax function
         the softmax function, only for this layer a classification itself (last layer)
         """
         """Print(),"""
         self.layer4 = nn.Sequential(
-            nn.Linear(options.hidden_sizes[3], options.hidden_sizes[4]),
-            nn.ReLU(),
-            nn.Softmax(dim=1)
+            nn.Linear(options.hidden_sizes[3], options.hidden_sizes[4])
         )
         """END TODO"""
 

@@ -116,27 +116,18 @@ def train_classification_model(model: Classifier, optimizer: torch.optim.Optimiz
             # options.batch_size_train
             x_reshaped = x.view(x.size(0), -1).to(options.device)
             y = y.cuda()
-            x = x.cuda()
-     #       x_reshaped.cuda()
-    #        print(f"Tensor x_reshaped is stored on: {x_reshaped.device} ")
+    #       x_reshaped.cuda()
+    #       print(f"Tensor x_reshaped is stored on: {x_reshaped.device} ")
             prediction = model.forward(x_reshaped)
             prediction.cuda()
-     #       print(f"Tensor prediction is stored on: {prediction.device} ")
-
-            # eigen functie, datasetwaarden door ons model sturen en met de output iets doen
-
-            # calculate the loss, use your previously defined criterion
-
-
-          #  print(f"Tensor x is stored on: {x.device} ")
-           # print(f"Tensor y is stored on: {y.device} ")
-
+    #       print(f"Tensor prediction is stored on: {prediction.device} ")
+    #       print(f"Tensor x is stored on: {x.device} ")
+    #       print(f"Tensor y is stored on: {y.device} ")
 
             loss = criterion(prediction, y)
             loss = loss.cuda()
             # zero out all gradients
             optimizer.zero_grad()
-
             # propagate the loss backward
             loss.backward()
             # use your optimizer to perform an update step
